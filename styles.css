@@ -177,27 +177,22 @@ h1::after {
 .section-header {
     text-align: center;
     margin-bottom: 2rem;
-    position: relative;
+    color: #2c3e50;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
-    color: var(--text-color);
-    margin-bottom: 1rem;
-    position: relative;
-    display: inline-block;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
 }
 
-.section-header h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: 2px;
+.section-header p {
+    font-size: 1rem;
+    color: #34495e;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
 }
 
 .icon-circle {
@@ -452,7 +447,36 @@ textarea:focus, input[type="text"]:focus, input[type="tel"]:focus {
     }
 
     .section-header h2 {
-        font-size: 2rem;
+        font-size: 1.5rem;
+    }
+
+    .section-header p {
+        font-size: 0.95rem;
+        padding: 0 1rem;
+    }
+
+    .receipt-question h3 {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+    }
+
+    .receipt-options {
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    .receipt-option {
+        padding: 0.6rem 1rem;
+        min-width: 100px;
+    }
+
+    .receipt-option label {
+        font-size: 0.95rem;
+    }
+
+    .receipt-option input[type="radio"] {
+        width: 16px;
+        height: 16px;
     }
 
     .stars i {
@@ -569,124 +593,70 @@ textarea:focus, input[type="text"]:focus, input[type="tel"]:focus {
 }
 
 .feedback-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 10px 30px var(--shadow-color);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.feedback-card .rating-summary {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.feedback-card .rating-item {
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.feedback-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-}
-
-.feedback-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px var(--shadow-color);
-}
-
-.feedback-header {
-    display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(78, 205, 196, 0.2);
+    margin-bottom: 0.75rem;
+    color: #2c3e50;
 }
 
-.customer-info {
-    font-weight: 600;
-    color: var(--dark-color);
-    font-size: 1.1rem;
-}
-
-.timestamp {
-    color: var(--gray-color);
-    font-size: 0.9rem;
-}
-
-.rating-summary {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin: 1rem 0;
-}
-
-.rating-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(78, 205, 196, 0.1);
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
-
-.rating-item:hover {
-    background: rgba(78, 205, 196, 0.2);
-    transform: translateY(-2px);
-}
-
-.rating-item span {
-    color: var(--dark-color);
+.feedback-card .rating-item span {
     font-weight: 500;
 }
 
-.rating-item i {
-    color: var(--accent-color);
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+.feedback-card .improvements {
+    margin: 1.5rem 0;
 }
 
-.improvements {
-    background: rgba(255, 107, 107, 0.05);
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1rem 0;
-}
-
-.improvements h3 {
-    color: var(--dark-color);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.improvements p {
-    color: var(--gray-color);
-    font-style: italic;
-    line-height: 1.6;
+.feedback-card .improvement-item {
     margin-bottom: 1rem;
 }
 
-.overall-comment {
-    background: rgba(78, 205, 196, 0.05);
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1rem 0;
-}
-
-.overall-comment strong {
-    color: var(--dark-color);
+.feedback-card .improvement-item span {
     display: block;
-    margin-bottom: 0.8rem;
-    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
 }
 
-.overall-comment p {
-    color: var(--gray-color);
-    line-height: 1.6;
+.feedback-card .improvement-item p {
+    color: #34495e;
+    line-height: 1.5;
+}
+
+.feedback-card .review-comment {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.feedback-card .review-comment span {
+    display: block;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.feedback-card .review-comment p {
+    color: #34495e;
+    line-height: 1.5;
 }
 
 /* Add overall rating stars to overall experience section */
@@ -1015,44 +985,54 @@ textarea:focus, input[type="text"]:focus, input[type="tel"]:focus {
 
 /* Radio Button Styles */
 .receipt-question {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.receipt-question h3 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.receipt-options {
     display: flex;
     justify-content: center;
-    margin-top: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0 1rem;
 }
 
-.radio-group {
-    display: flex;
-    gap: 2rem;
-}
-
-.radio-label {
+.receipt-option {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
     cursor: pointer;
-    padding: 1rem 2rem;
-    background: var(--light-color);
-    border-radius: 25px;
     transition: all 0.3s ease;
+    min-width: 120px;
+    justify-content: center;
 }
 
-.radio-label:hover {
-    background: rgba(78, 205, 196, 0.1);
-    transform: translateY(-2px);
+.receipt-option:hover {
+    border-color: #3498db;
+    background: #f8f9fa;
 }
 
-.radio-label input[type="radio"] {
-    display: none;
+.receipt-option input[type="radio"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
 }
 
-.radio-label span {
-    font-size: 1.1rem;
-    color: var(--dark-color);
-}
-
-.radio-label input[type="radio"]:checked + span {
-    color: var(--primary-color);
-    font-weight: 600;
+.receipt-option label {
+    margin: 0;
+    font-size: 1rem;
+    color: #2c3e50;
+    cursor: pointer;
 }
 
 /* Last Purchase Section */
