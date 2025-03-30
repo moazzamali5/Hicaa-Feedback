@@ -47,6 +47,10 @@ const overallExperience = document.getElementById('overallExperience');
 let formSections = [
     'receiptQuestion',
     'receiptUpload',
+    'diningType',
+    'drinks',
+    'spending',
+    'recommendations',
     'productRating',
     'environmentRating',
     'serviceRating',
@@ -114,38 +118,75 @@ document.querySelectorAll('.stars').forEach(starContainer => {
     });
 });
 
-// Handle receipt question selection
-document.querySelectorAll('input[name="hasReceipt"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        const nextBtn = document.querySelector('#receiptQuestion .nav-btn.next');
-        nextBtn.disabled = false;
-        
-        // Store the selection
-        const hasReceipt = e.target.value === 'yes';
-        
-        // Update the form sections array based on selection
-        if (hasReceipt) {
-            // If yes, keep the original flow with receiptUpload
-            formSections = [
-                'receiptQuestion',
-                'receiptUpload',
-                'productRating',
-                'environmentRating',
-                'serviceRating',
-                'overallExperience'
-            ];
-        } else {
-            // If no, insert lastPurchase after receiptQuestion
-            formSections = [
-                'receiptQuestion',
-                'lastPurchase',
-                'productRating',
-                'environmentRating',
-                'serviceRating',
-                'overallExperience'
-            ];
-        }
+// Update the event listeners for navigation buttons
+document.addEventListener('DOMContentLoaded', () => {
+    // Handle receipt question selection
+    document.querySelectorAll('input[name="hasReceipt"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const nextBtn = document.querySelector('#receiptQuestion .nav-btn.next');
+            nextBtn.disabled = false;
+            
+            // Store the selection
+            const hasReceipt = e.target.value === 'yes';
+            
+            // Update the form sections array based on selection
+            if (hasReceipt) {
+                formSections = [
+                    'receiptQuestion',
+                    'receiptUpload',
+                    'diningType',
+                    'drinks',
+                    'spending',
+                    'recommendations',
+                    'productRating',
+                    'environmentRating',
+                    'serviceRating',
+                    'overallExperience'
+                ];
+            } else {
+                formSections = [
+                    'receiptQuestion',
+                    'lastPurchase',
+                    'diningType',
+                    'drinks',
+                    'spending',
+                    'recommendations',
+                    'productRating',
+                    'environmentRating',
+                    'serviceRating',
+                    'overallExperience'
+                ];
+            }
+        });
     });
+
+    // Add click event listeners to all navigation buttons
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.classList.contains('prev')) {
+                navigateSection(-1);
+            } else if (btn.classList.contains('next')) {
+                navigateSection(1);
+            }
+        });
+    });
+
+    // Add input event listeners for text areas and inputs
+    document.querySelectorAll('textarea, input[type="number"]').forEach(input => {
+        input.addEventListener('input', () => {
+            updateNavigationButtons();
+        });
+    });
+
+    // Add change event listeners for radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            updateNavigationButtons();
+        });
+    });
+
+    // Initialize navigation buttons
+    updateNavigationButtons();
 });
 
 // Handle receipt upload
@@ -205,11 +246,41 @@ document.querySelector('#overallExperience textarea[name="overallComment"]').add
     }
 });
 
-// Update form submission logic
+// Branch Selection
+const branchModal = document.getElementById('branchModal');
+const branchForm = document.getElementById('branchForm');
+let selectedBranch = '';
+
+// Show branch selection modal on page load
+document.addEventListener('DOMContentLoaded', () => {
+    branchModal.style.display = 'flex';
+});
+
+// Handle branch selection
+branchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const branchInput = branchForm.querySelector('input[name="branch"]:checked');
+    if (branchInput) {
+        selectedBranch = branchInput.value;
+        branchModal.style.display = 'none';
+        // Store the selected branch in localStorage
+        localStorage.setItem('selectedBranch', selectedBranch);
+    }
+});
+
+// Update the form submission logic
 feedbackForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    // Validate overall comment and rating
+    // Get the selected branch
+    selectedBranch = localStorage.getItem('selectedBranch');
+    if (!selectedBranch) {
+        alert('Please select a branch first');
+        branchModal.style.display = 'flex';
+        return;
+    }
+
+    // Only validate overall experience when actually submitting the form
     const overallComment = document.querySelector('textarea[name="overallComment"]').value.trim();
     const overallRating = document.querySelector('#overallExperience .stars i.active')?.dataset.rating || 0;
     
@@ -333,6 +404,10 @@ customerForm.addEventListener('submit', async (e) => {
         const formData = {
             hasReceipt: document.querySelector('input[name="hasReceipt"]:checked').value,
             lastPurchaseDate: document.querySelector('textarea[name="lastPurchaseDate"]').value.trim(),
+            diningType: document.querySelector('input[name="diningType"]:checked').value,
+            drinksOrdered: document.querySelector('textarea[name="drinksOrdered"]').value.trim(),
+            spendingPerPerson: parseFloat(document.querySelector('input[name="spendingPerPerson"]').value),
+            recommendedDrinks: document.querySelector('textarea[name="recommendedDrinks"]').value.trim(),
             productRating: getRating('productRating'),
             productImprovement: document.querySelector('textarea[name="productImprovement"]').value.trim(),
             environmentRating: getRating('environmentRating'),
@@ -343,6 +418,7 @@ customerForm.addEventListener('submit', async (e) => {
             overallComment: document.querySelector('textarea[name="overallComment"]').value.trim(),
             customerName,
             customerPhone,
+            branch: selectedBranch,
             timestamp: new Date().toISOString()
         };
 
@@ -596,6 +672,7 @@ function createFeedbackCard(feedback) {
         <div class="feedback-header">
             <div class="customer-info">
                 ${feedback.customerName} - ${feedback.customerPhone}
+                <span class="branch-tag">${feedback.branch}</span>
             </div>
             <div class="timestamp">${formattedDate}</div>
         </div>
@@ -607,6 +684,24 @@ function createFeedbackCard(feedback) {
         <div class="purchase-info">
             <strong>Last Purchase:</strong>
             <p>${feedback.lastPurchaseDate}</p>
+        </div>
+        <div class="visit-details">
+            <div class="detail-item">
+                <strong>Visit Type:</strong>
+                <p>${feedback.diningType}</p>
+            </div>
+            <div class="detail-item">
+                <strong>Drinks Ordered:</strong>
+                <p>${feedback.drinksOrdered}</p>
+            </div>
+            <div class="detail-item">
+                <strong>Spending per Person:</strong>
+                <p>RM ${feedback.spendingPerPerson.toFixed(2)}</p>
+            </div>
+            <div class="detail-item">
+                <strong>Recommended Drinks:</strong>
+                <p>${feedback.recommendedDrinks}</p>
+            </div>
         </div>
         <div class="rating-summary">
             <div class="rating-item">
@@ -707,7 +802,7 @@ function applyFilters() {
     });
 }
 
-// Function to navigate between sections
+// Update the navigateSection function
 function navigateSection(direction) {
     const currentSection = document.getElementById(formSections[currentSectionIndex]);
     const nextSectionIndex = currentSectionIndex + direction;
@@ -732,31 +827,7 @@ function navigateSection(direction) {
     }
 }
 
-// Function to update navigation buttons
-function updateNavigationButtons() {
-    const currentSection = document.getElementById(formSections[currentSectionIndex]);
-    const prevBtn = currentSection.querySelector('.nav-btn.prev');
-    const nextBtn = currentSection.querySelector('.nav-btn.next');
-    
-    // Update back button visibility
-    if (prevBtn) {
-        // Hide back button for first section and overall experience section
-        prevBtn.style.display = (currentSectionIndex === 0 || currentSection.id === 'overallExperience') ? 'none' : 'flex';
-    }
-    
-    // Update next button state
-    if (nextBtn) {
-        const isLastSection = currentSectionIndex === formSections.length - 1;
-        nextBtn.style.display = isLastSection ? 'none' : 'flex';
-        
-        // Enable/disable next button based on section validation
-        if (!isLastSection) {
-            nextBtn.disabled = !validateCurrentSection();
-        }
-    }
-}
-
-// Function to validate current section
+// Update the validateCurrentSection function
 function validateCurrentSection() {
     const currentSection = document.getElementById(formSections[currentSectionIndex]);
     
@@ -767,6 +838,17 @@ function validateCurrentSection() {
             return receiptInput.files.length > 0;
         case 'lastPurchase':
             return document.querySelector('textarea[name="lastPurchaseDate"]').value.trim() !== '';
+        case 'diningType':
+            return document.querySelector('input[name="diningType"]:checked') !== null;
+        case 'drinks':
+            const drinksOrdered = document.querySelector('textarea[name="drinksOrdered"]');
+            return drinksOrdered && drinksOrdered.value.trim() !== '';
+        case 'spending':
+            const spending = document.querySelector('input[name="spendingPerPerson"]');
+            return spending && spending.value !== '' && parseFloat(spending.value) > 0;
+        case 'recommendations':
+            const recommendedDrinks = document.querySelector('textarea[name="recommendedDrinks"]');
+            return recommendedDrinks && recommendedDrinks.value.trim() !== '';
         case 'productRating':
         case 'environmentRating':
         case 'serviceRating':
@@ -781,33 +863,25 @@ function validateCurrentSection() {
     }
 }
 
-// Add event listeners for navigation buttons
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (btn.classList.contains('prev')) {
-            navigateSection(-1);
-        } else if (btn.classList.contains('next')) {
-            navigateSection(1);
-        }
-    });
-});
-
-// Update navigation buttons when section becomes visible
-document.querySelectorAll('.rating-section').forEach(section => {
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.target.classList.contains('visible')) {
-                updateNavigationButtons();
-            }
-        });
-    });
+// Update the updateNavigationButtons function
+function updateNavigationButtons() {
+    const currentSection = document.getElementById(formSections[currentSectionIndex]);
+    const prevBtn = currentSection.querySelector('.nav-btn.prev');
+    const nextBtn = currentSection.querySelector('.nav-btn.next');
     
-    observer.observe(section, { attributes: true, attributeFilter: ['class'] });
-});
-
-// Handle textarea inputs
-document.querySelectorAll('textarea').forEach(textarea => {
-    textarea.addEventListener('input', () => {
-        updateNavigationButtons();
-    });
-}); 
+    // Update back button visibility
+    if (prevBtn) {
+        prevBtn.style.display = (currentSectionIndex === 0) ? 'none' : 'flex';
+    }
+    
+    // Update next button state
+    if (nextBtn) {
+        const isLastSection = currentSectionIndex === formSections.length - 1;
+        nextBtn.style.display = isLastSection ? 'none' : 'flex';
+        
+        // Enable/disable next button based on section validation
+        if (!isLastSection) {
+            nextBtn.disabled = !validateCurrentSection();
+        }
+    }
+} 
