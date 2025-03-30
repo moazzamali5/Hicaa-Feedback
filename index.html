@@ -172,6 +172,35 @@
     </style>
 </head>
 <body>
+    <!-- Branch Selection Modal -->
+    <div id="branchModal" class="modal">
+        <div class="modal-content branch-selection">
+            <h2>Select Branch</h2>
+            <p>Please select the branch you want to rate:</p>
+            <form id="branchForm">
+                <div class="branch-options">
+                    <label class="branch-option">
+                        <input type="radio" name="branch" value="ICOM SQUARE" required>
+                        <span class="branch-name">ICOM SQUARE</span>
+                    </label>
+                    <label class="branch-option">
+                        <input type="radio" name="branch" value="BATU KAWA" required>
+                        <span class="branch-name">BATU KAWA</span>
+                    </label>
+                    <label class="branch-option">
+                        <input type="radio" name="branch" value="AEMON MALL" required>
+                        <span class="branch-name">AEMON MALL</span>
+                    </label>
+                    <label class="branch-option">
+                        <input type="radio" name="branch" value="EMPORIUM MALL" required>
+                        <span class="branch-name">EMPORIUM MALL</span>
+                    </label>
+                </div>
+                <button type="submit" class="submit-btn">Continue</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Mobile Menu Button -->
     <button id="mobileMenuBtn" class="mobile-menu-btn">
         <i class="fas fa-bars"></i>
@@ -257,6 +286,85 @@
                         </div>
                         <div class="input-container">
                             <textarea name="lastPurchaseDate" placeholder="Tell us when you last visited HICAA..."></textarea>
+                        </div>
+                        <div class="nav-buttons">
+                            <button type="button" class="nav-btn prev"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button type="button" class="nav-btn next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Dining Type Section -->
+                    <div id="diningType" class="rating-section hidden">
+                        <div class="section-header">
+                            <div class="icon-circle">
+                                <i class="fas fa-utensils section-icon"></i>
+                            </div>
+                            <h2>How did you enjoy your drinks?</h2>
+                        </div>
+                        <div class="dining-options">
+                            <label class="dining-option">
+                                <input type="radio" name="diningType" value="dineIn" required>
+                                <span class="dining-name">Dine In</span>
+                            </label>
+                            <label class="dining-option">
+                                <input type="radio" name="diningType" value="takeOut" required>
+                                <span class="dining-name">Take Out</span>
+                            </label>
+                            <label class="dining-option">
+                                <input type="radio" name="diningType" value="delivery" required>
+                                <span class="dining-name">Delivery</span>
+                            </label>
+                        </div>
+                        <div class="nav-buttons">
+                            <button type="button" class="nav-btn prev"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button type="button" class="nav-btn next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Drinks Section -->
+                    <div id="drinks" class="rating-section hidden">
+                        <div class="section-header">
+                            <div class="icon-circle">
+                                <i class="fas fa-glass-martini-alt section-icon"></i>
+                            </div>
+                            <h2>What drinks did you order?</h2>
+                        </div>
+                        <div class="drinks-input">
+                            <textarea name="drinksOrdered" placeholder="Please list the drinks you ordered..." required></textarea>
+                        </div>
+                        <div class="nav-buttons">
+                            <button type="button" class="nav-btn prev"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button type="button" class="nav-btn next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spending Section -->
+                    <div id="spending" class="rating-section hidden">
+                        <div class="section-header">
+                            <div class="icon-circle">
+                                <i class="fas fa-dollar-sign section-icon"></i>
+                            </div>
+                            <h2>How much did you spend per person?</h2>
+                        </div>
+                        <div class="spending-input">
+                            <input type="number" name="spendingPerPerson" placeholder="Enter amount in RM" min="0" step="0.01" required>
+                        </div>
+                        <div class="nav-buttons">
+                            <button type="button" class="nav-btn prev"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button type="button" class="nav-btn next" disabled>Next <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations Section -->
+                    <div id="recommendations" class="rating-section hidden">
+                        <div class="section-header">
+                            <div class="icon-circle">
+                                <i class="fas fa-thumbs-up section-icon"></i>
+                            </div>
+                            <h2>What drinks would you recommend?</h2>
+                        </div>
+                        <div class="recommendations-input">
+                            <textarea name="recommendedDrinks" placeholder="Please list the drinks you would recommend to others..." required></textarea>
                         </div>
                         <div class="nav-buttons">
                             <button type="button" class="nav-btn prev"><i class="fas fa-arrow-left"></i> Back</button>
